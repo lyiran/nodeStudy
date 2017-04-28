@@ -6,11 +6,11 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
+var users = require('./routes/users');
 
 var settings = require('./settings');
-var users = require('./routes/users');
 var session = require('express-session');
-varMongoStore = require('connect-mongo')(session);
+var MongoStore = require('connect-mongo')(session);
 
 
 var app = express();
