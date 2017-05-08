@@ -13,10 +13,11 @@ var router = express.Router();
 router.get('/', function (req, res) {
   Post.get(null, function (err, posts) {
     if (err) {
-      post = [];
+      posts = [];
     }
     res.render('index', {
       title: '主页',
+      posts: posts,
       user: req.session.user,
       success: req.flash('success').toString(),
       error: req.flash('error').toString()
@@ -61,7 +62,7 @@ router.post('/reg', function (req, res) {
       return res.redirect('/');
     }
     if (user) {
-      req.flash('error', '用户已存在');
+      req.flash('error', '用户已存在！');
       return res.redirect('/reg');//返回注册页
     }
     //如果不存在则新增用户
@@ -113,7 +114,7 @@ router.post('/login', function (req, res) {
 
 router.get('/post', checkLogin);
 router.get('/post', function (req, res) {
-  res.render('/post', {
+  res.render('post', {
     title: '发表',
     user: req.session.user,
     success: req.flash('success').toString(),

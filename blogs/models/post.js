@@ -1,4 +1,4 @@
-var mongodb == require('./db');
+var mongodb = require('./db');
 
 function Post(name, title, post) {
   this.name = name;
@@ -11,7 +11,7 @@ module.exports = Post;
 //存储一篇文章及其相关信息
 Post.prototype.save = function(callback) {
   var date = new Date();
-  //纯粹跟中时间格式，方便以后扩展
+  //存储各种时间格式，方便以后扩展
   var time = {
     date: date,
     year: date.getFullYear(),
