@@ -2,6 +2,7 @@ var express = require('express');
 var crypto = require('crypto');
 var User = require('../models/user.js');
 var Post = require('../models/post.js');
+var Comment = require('../models/comment.js');
 var router = express.Router();
 
 /* GET home page. */
@@ -211,7 +212,49 @@ router.get('/edit/:name/:day/:title', function (req, res) {
   Post.edit(currentUser.name, req.params.day, req.params.title, function (err, post) {
     if (err) {
       req.flash('error', err);
+      return res.redirect('back');
     }
+    console.log('----------');
+    console.log(post);
+    console.log('----------');
+
+    res.render('edit', {
+      title: '编辑',
+      post: post,
+      user: req.session.user,
+      success: req.flash('success').toString(),
+      error: req.flash('error').toString()
+    });
+  });
+});
+
+router.post('/edit/:name/:day/:title/', checkLogin);
+router.post('/edit/:name/:day/:title', function (req, res) {
+  var currentUser = req.session.user;
+  Post.update(currentUser.name, req.params.day, req.params.title, req.body.post, function(err) {
+    var url = encodeURI('/u/' + req.params.name + '/' + req.params.day + '/' + req.params.title);
+    if (err) {
+      req.flash('error', err);
+      return res.redirect(url);//出错！返回文章页
+    }
+    req.flash('success', '修改成功！');
+    res.redirect(url);//成功！返回文章页
+  });
+});
+
+
+router.get('/remove/:name/:day/:title', checkLogin);
+router.get('/remove/:name/:day/:title', function (req, res) {
+  var currentUser = req.session.user;
+  Post.remove(currentUser.name, req.params.day, req.params.title, function (err) {
+    if (err) {
+      req.flash('error', err);
+      // console.log('++++++');
+      // console.log(err);
+      return res.redirect('back');
+    }
+    req.flash('success', '删除成功!');
+    res.redirect('/');
   });
 });
 
