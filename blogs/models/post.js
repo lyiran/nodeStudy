@@ -113,7 +113,13 @@ Post.getOne = function(name, day, title, callback) {
           return callback(err);
         }
         //解析markdown为html
-        callback(null, doc);//返回查询的一篇文章
+        //返回查询的一篇文章
+        // if (doc) {
+          doc.post = markdown.toHTML(doc.post);
+        //   doc.comments.forEach(function (comment) {
+        //     comment.content = markdown.toHTML(comment.content);
+        //   });
+        // }
       });
     });
   });
